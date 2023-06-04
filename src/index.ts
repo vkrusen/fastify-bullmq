@@ -16,8 +16,7 @@ const run = async () => {
   const welcomeEmailQueue = createQueue('WelcomeEmailQueue');
   await setupQueueProcessor(welcomeEmailQueue.name);
 
-  const server: FastifyInstance<Server, IncomingMessage, ServerResponse> =
-    fastify();
+  const server: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
 
   const serverAdapter = new FastifyAdapter();
   createBullBoard({
@@ -30,45 +29,33 @@ const run = async () => {
     basePath: '/',
   });
 
-  server.get(
-    '/add-job',
-    {
-      schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            title: { type: 'string' },
-            id: { type: 'string' },
-          },
+  server.get('/add-job', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          id: { type: 'string' },
         },
       },
     },
-    (req: FastifyRequest<{ Querystring: AddJobQueryString }>, reply) => {
-      if (
-        req.query == null ||
-        req.query.email == null ||
-        req.query.id == null
-      ) {
-        reply
-          .status(400)
-          .send({ error: 'Requests must contain both an id and a email' });
+  }, (req: FastifyRequest<{ Querystring: AddJobQueryString }>, reply) => {
+    if (req.query == null || req.query.email == null || req.query.id == null) {
+      reply.status(400).send({ error: 'Requests must contain both an id and an email' });
 
-        return;
-      }
-
-      const { email, id } = req.query;
-      welcomeEmailQueue.add(`WelcomeEmail-${id}`, { email });
-
-      reply.send({
-        ok: true,
-      });
+      return;
     }
-  );
+
+    const { email, id } = req.query;
+    welcomeEmailQueue.add(`WelcomeEmail-${id}`, { email });
+
+    reply.send({
+      ok: true,
+    });
+  });
 
   await server.listen({ port: env.PORT, host: '0.0.0.0' });
-  console.log(
-    `To populate the queue and demo the UI, run: curl ${env.RAILWAY_STATIC_URL}/add-job?id=1&email=hello%40world.com`
-  );
+  console.log(`To populate the queue and demo the UI, run: curl ${env.RAILWAY_STATIC_URL}/add-job?id=1&email=hello%40world.com`);
 };
 
 run().catch((e) => {
