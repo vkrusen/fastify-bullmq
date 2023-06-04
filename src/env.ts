@@ -6,9 +6,9 @@ export const env = envsafe({
   REDISUSER: str(),
   REDISPASSWORD: str(),
   PORT: port({
-    devDefault: 3000,
+    devDefault: 3002,
   }),
   RAILWAY_STATIC_URL: str({
-    devDefault: 'http://localhost:3000',
+    devDefault: 'http://localhost:3002',
   }),
 });

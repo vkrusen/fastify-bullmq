@@ -27,7 +27,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "peerDependencies": {},
   "engines": {
     "node": ">=12"
   },
@@ -43,6 +42,7 @@
     "@bull-board/fastify": "^4.2.2",
     "@bull-board/ui": "^4.2.2",
     "bullmq": "^1.90.2",
+    "dotenv": "^16.1.4",
     "envsafe": "^2.0.3",
     "fastify": "^4.5.3"
   }
